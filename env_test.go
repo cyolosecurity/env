@@ -154,14 +154,14 @@ type NestedStruct struct {
 	NestedVar string `env:"nestedvar"`
 }
 
-func TestIssue245(t *testing.T) {
-	t.Setenv("NAME_NOT_SET", "")
+func TestAcceptEmptyValues(t *testing.T) {
+	t.Setenv("EMPTY_VALUE", "")
 	type user struct {
-		Name string `env:"NAME_NOT_SET" envDefault:"abcd"`
+		Value string `env:"EMPTY_VALUE" envDefault:"something"`
 	}
 	cfg := user{}
 	isNoErr(t, Parse(&cfg))
-	isEqual(t, cfg.Name, "abcd")
+	isEqual(t, cfg.Value, "")
 }
 
 func TestParsesEnv(t *testing.T) {
@@ -889,7 +889,7 @@ func TestErrorRequiredWithDefault(t *testing.T) {
 
 	t.Setenv("IS_REQUIRED", "")
 	isNoErr(t, Parse(cfg))
-	isEqual(t, "important", cfg.IsRequired)
+	isEqual(t, "", cfg.IsRequired)
 }
 
 func TestErrorRequiredNotSet(t *testing.T) {
